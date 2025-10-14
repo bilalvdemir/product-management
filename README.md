@@ -143,7 +143,8 @@ To open the Swagger UI:
 2. Open your browser and go to:  
    [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 3. You can view and test all API endpoints from this interface.
-
+4. H2 Web UI [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
+5. JDBC Url: [jdbc:h2:mem:product]()
 ---
 
 ## Testing
