@@ -1,0 +1,84 @@
+spring:
+  application:
+    name: cargo
+
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:weatherdb
+    username: sa
+    password:
+    
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+      
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      jakarta:
+        persistence:
+          validation:
+            mode: auto
+    show-sql: true
+    
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      
+logging:
+  level:
+    com.packer.code: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.web: DEBUG
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      productService:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        slow-call-rate-threshold: 100
+        slow-call-duration-threshold: 2s
+
+  retry:
+    instances:
+      productService:
+        max-attempts: 3
+        wait-duration: 500ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+
+  timelimiter:
+    instances:
+      productService:
+        timeout-duration: 3s
+
+  ratelimiter:
+    instances:
+      productService:
+        limit-for-period: 10
+        limit-refresh-period: 1s
+        timeout-duration: 100ms
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"
+          - health
+          - info
+          - metrics
+          - prometheus
+  endpoint:
+    health:
+      show-details: always
