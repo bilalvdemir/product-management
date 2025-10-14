@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:weatherdb
+    url: jdbc:h2:mem:product
     username: sa
     password:
     
@@ -27,7 +27,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
-      
+      settings:
+        web-allow-others: true
 logging:
   level:
     com.packer.code: DEBUG

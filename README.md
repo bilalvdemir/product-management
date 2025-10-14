@@ -124,7 +124,10 @@ The app will start on http://localhost:8080 and use the in-memory H2 database.
 
 If you prefer Docker:
 1. Make sure Docker is running.
-2. Run the following command:
+2. Build docker image command:
+   ```bash
+   docker build -t product-management:latest .
+3. Start docker compose with the following command:
 
    ```bash
    docker-compose up
