@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cargo
+    name: Product-Management
 
   datasource:
     driverClassName: org.h2.Driver
