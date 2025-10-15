@@ -1,4 +1,4 @@
-package com.products.code.application.service;
+package com.products.code.application.adapter;
 
 import com.products.code.application.ports.ProductService;
 import com.products.code.domain.exception.ProductNotFoundException;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Transactional
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceAdapter implements ProductService {
 
     private final ProductFactoryRegistry factoryProvider;
     private final ProductRepository productRepository;

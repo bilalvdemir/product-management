@@ -1,8 +1,8 @@
 package com.products.code.presentation.mapper;
 
 import com.products.code.domain.model.*;
-import com.products.code.presentation.dto.ProductRequest;
-import com.products.code.presentation.dto.ProductResponse;
+import com.products.code.presentation.dto.CreateProductCommand;
+import com.products.code.presentation.dto.GetProductQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ public class ProductDtoMapper {
     /**
      * Convert ProductRequest DTO to ProductData
      */
-    public ProductData toProductData(ProductRequest dto) {
+    public ProductData toProductData(CreateProductCommand dto) {
         return new ProductData(
                 dto.type(),
                 dto.title(),
@@ -34,12 +34,12 @@ public class ProductDtoMapper {
     /**
      * Convert Product to ProductResponse
      */
-    public ProductResponse toDto(Product domain) {
+    public GetProductQuery toDto(Product domain) {
         if (domain == null) {
             return null;
         }
 
-        ProductResponse.ProductResponseBuilder builder = ProductResponse.builder()
+        GetProductQuery.GetProductQueryBuilder builder = GetProductQuery.builder()
                 .id(domain.getId())
                 .type(domain.getProductType())
                 .title(domain.getTitle())

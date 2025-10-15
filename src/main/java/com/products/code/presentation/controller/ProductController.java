@@ -4,8 +4,8 @@ import com.products.code.application.ports.ProductService;
 import com.products.code.domain.model.Product;
 import com.products.code.domain.model.ProductData;
 import com.products.code.presentation.dto.ApiResponse;
-import com.products.code.presentation.dto.ProductRequest;
-import com.products.code.presentation.dto.ProductResponse;
+import com.products.code.presentation.dto.CreateProductCommand;
+import com.products.code.presentation.dto.GetProductQuery;
 import com.products.code.presentation.mapper.ProductDtoMapper;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,12 +37,12 @@ public class ProductController {
     @RateLimiter(name = "productService")
     @Operation(summary = "Create a new product",
             description = "Create a product any type (Book, Course, Magazine)")
-    public ResponseEntity<ApiResponse<ProductResponse>> createProduct(@RequestBody @Valid ProductRequest request) {
+    public ResponseEntity<ApiResponse<GetProductQuery>> createProduct(@RequestBody @Valid CreateProductCommand request) {
 
         log.info("Creating product: type:{}, title:{}", request.type(), request.title());
         ProductData data = dtoMapper.toProductData(request);
         Product created = productService.createProduct(data);
-        ProductResponse response = dtoMapper.toDto(created);
+        GetProductQuery response = dtoMapper.toDto(created);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success("Product created successfully", response));
@@ -52,11 +52,11 @@ public class ProductController {
     @RateLimiter(name = "productService")
     @Operation(summary = "Get product by ID",
             description = "Retrieve a product of any type by its ID")
-    public ResponseEntity<ApiResponse<ProductResponse>> getProduct(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<GetProductQuery>> getProduct(@PathVariable Long id) {
 
         log.debug("Fetching product: id:{}", id);
         Product product = productService.getProduct(id);
-        ProductResponse response = dtoMapper.toDto(product);
+        GetProductQuery response = dtoMapper.toDto(product);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
@@ -64,7 +64,7 @@ public class ProductController {
     @RateLimiter(name = "productService")
     @Operation(summary = "Get all products with pagination",
             description = "Retrieve all products of all types with pagination")
-    public ResponseEntity<ApiResponse<Page<ProductResponse>>> getAllProducts(
+    public ResponseEntity<ApiResponse<Page<GetProductQuery>>> getAllProducts(
             @ParameterObject
             @PageableDefault(page = 0, size = 20, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable) {
@@ -73,7 +73,7 @@ public class ProductController {
                 pageable.getPageNumber(), pageable.getPageSize());
 
         Page<Product> products = productService.getAllProducts(pageable);
-        Page<ProductResponse> responses = products.map(dtoMapper::toDto);
+        Page<GetProductQuery> responses = products.map(dtoMapper::toDto);
         return ResponseEntity.ok(ApiResponse.success(responses));
     }
 
@@ -81,14 +81,14 @@ public class ProductController {
     @RateLimiter(name = "productService")
     @Operation(summary = "Update a product",
             description = "Update a product of any type")
-    public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(
+    public ResponseEntity<ApiResponse<GetProductQuery>> updateProduct(
             @PathVariable Long id,
-            @RequestBody @Valid ProductRequest request) {
+            @RequestBody @Valid CreateProductCommand request) {
 
         log.info("Updating product: id:{}, type:{}", id, request.type());
         ProductData domain = dtoMapper.toProductData(request);
         Product updated = productService.updateProduct(id, domain);
-        ProductResponse response = dtoMapper.toDto(updated);
+        GetProductQuery response = dtoMapper.toDto(updated);
         return ResponseEntity.ok(
                 ApiResponse.success("Product updated successfully", response));
     }
@@ -109,7 +109,7 @@ public class ProductController {
     @RateLimiter(name = "productService")
     @Operation(summary = "Search products by title",
             description = "Search products of all types by title keyword")
-    public ResponseEntity<ApiResponse<Page<ProductResponse>>> searchProducts(
+    public ResponseEntity<ApiResponse<Page<GetProductQuery>>> searchProducts(
             @Parameter(description = "Search text. Example: 'book'", example = "string")
             @RequestParam(required = false) String keyword,
             @ParameterObject
@@ -119,7 +119,7 @@ public class ProductController {
         log.debug("Searching products: keyword:{}, page:{}, size:{}",
                 keyword, pageable.getPageNumber(), pageable.getPageSize());
         Page<Product> products = productService.searchProducts(keyword, pageable);
-        Page<ProductResponse> responses = products.map(dtoMapper::toDto);
+        Page<GetProductQuery> responses = products.map(dtoMapper::toDto);
         return ResponseEntity.ok(ApiResponse.success(responses));
     }
 }

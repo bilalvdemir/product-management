@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record ProductRequest(
+public record CreateProductCommand(
         @NotNull(message = "Type cannot be null")
         ProductType type,
 

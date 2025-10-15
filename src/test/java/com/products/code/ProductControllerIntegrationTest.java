@@ -3,7 +3,7 @@ package com.products.code;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.products.code.domain.model.ProductType;
 import com.products.code.infrastructure.persistence.repository.jpa.JpaProductRepository;
-import com.products.code.presentation.dto.ProductRequest;
+import com.products.code.presentation.dto.CreateProductCommand;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -42,7 +42,7 @@ class ProductControllerIntegrationTest {
     @Order(1)
     @DisplayName("Should create product via API")
     void createProduct_Integration() throws Exception {
-        ProductRequest request = new ProductRequest(
+        CreateProductCommand request = new CreateProductCommand(
                 ProductType.BOOK,
                 "Test Book",
                 new BigDecimal("29.99"),

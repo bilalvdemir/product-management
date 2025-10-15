@@ -1,6 +1,6 @@
 package com.products.code;
 
-import com.products.code.application.service.ProductServiceImpl;
+import com.products.code.application.adapter.ProductServiceAdapter;
 import com.products.code.domain.factory.ProductFactory;
 import com.products.code.domain.factory.ProductFactoryRegistry;
 import com.products.code.domain.model.Book;
@@ -11,8 +11,8 @@ import com.products.code.infrastructure.exception.ProductNotFoundException;
 import com.products.code.infrastructure.persistence.entity.BookJpaEntity;
 import com.products.code.infrastructure.persistence.entity.ProductJpaEntity;
 import com.products.code.infrastructure.persistence.repository.jpa.JpaProductRepository;
-import com.products.code.presentation.dto.ProductRequest;
-import com.products.code.presentation.dto.ProductResponse;
+import com.products.code.presentation.dto.CreateProductCommand;
+import com.products.code.presentation.dto.GetProductQuery;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceImplTest {
+class ProductServiceAdapterTest {
 
     @Mock
     private JpaProductRepository productRepository;
@@ -48,17 +48,17 @@ class ProductServiceImplTest {
     private Validator validator;
 
     @InjectMocks
-    private ProductServiceImpl productService;
+    private ProductServiceAdapter productService;
 
-    private ProductRequest bookRequest;
+    private CreateProductCommand bookRequest;
     private ProductData productData;
     private BookJpaEntity bookEntity;
     private Product product;
-    private ProductResponse bookResponse;
+    private GetProductQuery bookResponse;
 
     @BeforeEach
     void setUp() {
-        bookRequest = new ProductRequest(
+        bookRequest = new CreateProductCommand(
                 ProductType.BOOK,
                 "My Book",
                 new BigDecimal("49.99"),
@@ -89,7 +89,7 @@ class ProductServiceImplTest {
         bookEntity.setStock(10);
         bookEntity.setAuthor("Sami Gürel");
 
-        bookResponse = ProductResponse.builder()
+        bookResponse = GetProductQuery.builder()
                 .id(1L)
                 .type(ProductType.BOOK)
                 .title("My Book")
