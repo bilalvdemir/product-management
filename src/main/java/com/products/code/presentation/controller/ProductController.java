@@ -9,10 +9,12 @@ import com.products.code.presentation.dto.ProductResponse;
 import com.products.code.presentation.mapper.ProductDtoMapper;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -63,7 +65,8 @@ public class ProductController {
     @Operation(summary = "Get all products with pagination",
             description = "Retrieve all products of all types with pagination")
     public ResponseEntity<ApiResponse<Page<ProductResponse>>> getAllProducts(
-            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC)
+            @ParameterObject
+            @PageableDefault(page = 0, size = 20, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable) {
 
         log.debug("Fetching all products: page:{}, size:{}",
@@ -107,8 +110,10 @@ public class ProductController {
     @Operation(summary = "Search products by title",
             description = "Search products of all types by title keyword")
     public ResponseEntity<ApiResponse<Page<ProductResponse>>> searchProducts(
+            @Parameter(description = "Search text. Example: 'book'", example = "string")
             @RequestParam(required = false) String keyword,
-            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC)
+            @ParameterObject
+            @PageableDefault(page = 0, size = 20, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable) {
 
         log.debug("Searching products: keyword:{}, page:{}, size:{}",

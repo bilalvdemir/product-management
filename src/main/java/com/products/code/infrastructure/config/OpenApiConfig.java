@@ -31,10 +31,7 @@ public class OpenApiConfig {
                 .servers(List.of(
                         new Server()
                                 .url("http://localhost:8080")
-                                .description("Development Server"),
-                        new Server()
-                                .url("https://api.example.com")
-                                .description("Production Server")
+                                .description("Development Server")
                 ));
     }
 }

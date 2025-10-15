@@ -33,8 +33,7 @@ logging:
   level:
     com.packer.code: DEBUG
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.springframework.web: DEBUG
+    org.springframework.web: INFO
 
 resilience4j:
   circuitbreaker:
